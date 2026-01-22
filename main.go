@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+	defer fmt.Println("main func completed")
+
 	var wg sync.WaitGroup
 	minInt := 10
 	fmt.Println("Hello, World!")
