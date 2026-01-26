@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	feature1 "study/Feature1"
+	"study/feature2"
 	"sync"
 )
 
@@ -19,4 +20,6 @@ func main() {
 	}
 
 	wg.Wait()
+
+	feature2.Feature2()
 }
