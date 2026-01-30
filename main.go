@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	feature1 "study/Feature1"
 	"study/feature2"
+	featurepostgres "study/feature_postgres"
 	"sync"
 )
 
@@ -22,4 +23,6 @@ func main() {
 	wg.Wait()
 
 	feature2.Feature2()
+
+	featurepostgres.SimpleConn()
 }
