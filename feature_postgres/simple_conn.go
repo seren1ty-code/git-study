@@ -21,4 +21,6 @@ func SimpleConn() {
 
 	fmt.Println("Подлкючение к БД успешно!")
 
+	defer conn.Close(ctx)
+
 }
