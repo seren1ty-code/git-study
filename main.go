@@ -1,28 +1,33 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"math/rand"
-	feature1 "study/Feature1"
-	"study/feature2"
-	featurepostgres "study/feature_postgres"
-	"sync"
+	feature_library "study/feature_library/sql"
+	"time"
 )
 
 func main() {
-	defer fmt.Println("main func completed")
+	ctx := context.Background()
 
-	var wg sync.WaitGroup
-	minInt := 10
-	fmt.Println("Hello, World!")
-	for i := 1; i <= minInt+rand.Intn(15); i++ {
-		wg.Add(1)
-		go feature1.Feature1(i, &wg)
+	conn, err := feature_library.CreateConnection(ctx)
+	if err != nil {
+		panic(err)
 	}
 
-	wg.Wait()
+	library := feature_library.NewDbConnection(conn)
+	if err := library.CreateTable(ctx); err != nil {
+		panic(err)
+	}
+	if err := library.InsertRow(ctx, "TEST3", "TEST", "TEST", "TEST", 1111, false, time.Now()); err != nil {
+		panic(err)
+	}
+	if err := library.UpdateRow(ctx, 5, time.Now()); err != nil {
+		panic(err)
+	}
+	if err := library.DeleteRow(ctx, 3); err != nil {
+		panic(err)
+	}
 
-	feature2.Feature2()
-
-	featurepostgres.SimpleConn()
+	fmt.Println("succed!")
 }
