@@ -1,28 +1,23 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"math/rand"
-	feature1 "study/Feature1"
-	"study/feature2"
 	featurepostgres "study/feature_postgres"
-	"sync"
+	simplesql "study/feature_postgres/simple_sql"
 )
 
 func main() {
-	defer fmt.Println("main func completed")
+	ctx := context.Background()
 
-	var wg sync.WaitGroup
-	minInt := 10
-	fmt.Println("Hello, World!")
-	for i := 1; i <= minInt+rand.Intn(15); i++ {
-		wg.Add(1)
-		go feature1.Feature1(i, &wg)
+	conn, err := featurepostgres.CreateConnection(ctx)
+	if err != nil {
+		panic(err)
 	}
 
-	wg.Wait()
+	if err := simplesql.CreateTable(ctx, conn); err != nil {
+		panic(err)
+	}
 
-	feature2.Feature2()
-
-	featurepostgres.SimpleConn()
+	fmt.Println("Таблица была создана успешно")
 }
