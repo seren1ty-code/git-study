@@ -2,18 +2,19 @@ package feature_library
 
 import (
 	"context"
+
 	"time"
 
 	"github.com/jackc/pgx/v5"
 )
 
 type DataBase struct {
-	conn *pgx.Conn
+	Conn *pgx.Conn
 }
 
 func NewDbConnection(conn *pgx.Conn) *DataBase {
 	return &DataBase{
-		conn: conn,
+		Conn: conn,
 	}
 }
 
@@ -38,7 +39,7 @@ func (d *DataBase) CreateTable(ctx context.Context) error {
 		);
 		`
 
-	_, err := d.conn.Exec(ctx, sqlQuery)
+	_, err := d.Conn.Exec(ctx, sqlQuery)
 
 	return err
 }
@@ -65,7 +66,7 @@ func (d *DataBase) InsertRow(ctx context.Context,
 				VALUES ($1, $2, $3, $4, $5, $6, $7);
 				`
 
-	_, err := d.conn.Exec(ctx, sqlQuery, title, description, author, review, publication_year, completed, createdAt)
+	_, err := d.Conn.Exec(ctx, sqlQuery, title, description, author, review, publication_year, completed, createdAt)
 
 	return err
 
@@ -77,7 +78,7 @@ func (d *DataBase) DeleteRow(ctx context.Context, id int) error {
 	WHERE id = $1;
 	`
 
-	_, err := d.conn.Exec(ctx, sqlQuery, id)
+	_, err := d.Conn.Exec(ctx, sqlQuery, id)
 	return err
 }
 
@@ -89,6 +90,10 @@ func (d *DataBase) UpdateRow(ctx context.Context, id int, completeTime time.Time
 	WHERE id = $2;
 	`
 
-	_, err := d.conn.Exec(ctx, sqlQuery, time.Now(), completeTime, id)
+	_, err := d.Conn.Exec(ctx, sqlQuery, time.Now(), completeTime, id)
 	return err
+}
+
+func (d *DataBase) GetRows(ctx context.Context) (pgx.Rows, error) {
+	return d.Conn.Query(ctx, "SELECT * FROM library ORDER BY id ASC")
 }

@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	books "study/feature_library/books"
 	feature_library "study/feature_library/sql"
-	"time"
 )
 
 func main() {
@@ -15,19 +15,40 @@ func main() {
 		panic(err)
 	}
 
-	library := feature_library.NewDbConnection(conn)
-	if err := library.CreateTable(ctx); err != nil {
+	lib := feature_library.NewDbConnection(conn)
+	if err := lib.CreateTable(ctx); err != nil {
 		panic(err)
 	}
-	if err := library.InsertRow(ctx, "TEST3", "TEST", "TEST", "TEST", 1111, false, time.Now()); err != nil {
-		panic(err)
-	}
-	if err := library.UpdateRow(ctx, 5, time.Now()); err != nil {
-		panic(err)
-	}
-	if err := library.DeleteRow(ctx, 3); err != nil {
-		panic(err)
-	}
+
+	// cmpTime := time.Now()
+
+	// newB := books.Book{
+	// 	ID:              2,
+	// 	Title:           "REDACTED_TEST!!!!",
+	// 	Description:     "12",
+	// 	Author:          "34",
+	// 	Review:          "TEST1",
+	// 	PublicationYear: 1111,
+	// 	Completed:       true,
+	// 	CreatedAt:       time.Now(),
+	// 	CompletedAt:     &cmpTime,
+	// }
+
+	// books.AddNewBook(ctx, lib, newB)
+
+	// if err := books.ListBooks(ctx, lib); err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+
+	// if err := books.RedactBookByStruct(ctx, lib, newB); err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+
+	slice := []int{3, 4}
+
+	books.DeleteBooksBySlice(ctx, lib, slice)
 
 	fmt.Println("succed!")
 }

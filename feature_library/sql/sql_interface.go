@@ -5,4 +5,6 @@ type DbInterface interface {
 	DeleteRow()
 	UpdateRow()
 	InsertRow()
+	GetRows()
+	RedactBookByStruct()
 }
