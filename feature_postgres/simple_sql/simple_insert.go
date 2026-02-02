@@ -2,11 +2,18 @@ package simplesql
 
 import (
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 )
 
-func InsertRow(ctx context.Context, conn *pgx.Conn) error {
+func InsertRow(ctx context.Context,
+	conn *pgx.Conn,
+	title string,
+	description string,
+	completed bool,
+	createdAt time.Time,
+) error {
 	sqlQuery := `
 	INSERT INTO tasks(
 	title,
@@ -14,10 +21,10 @@ func InsertRow(ctx context.Context, conn *pgx.Conn) error {
 	completed,
 	created_at
 	)
-	VALUES ('TEST_TASK2', 'TEST_DESCRIPTION 12345', FALSE, '2026-02-02 18:01:00');
+	VALUES ($1, $2, $3, $4);
 	`
 
-	_, err := conn.Exec(ctx, sqlQuery)
+	_, err := conn.Exec(ctx, sqlQuery, title, description, completed, createdAt)
 
 	return err
 }
